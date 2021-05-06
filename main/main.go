@@ -6,5 +6,6 @@ import (
 
 func main() {
 
-	sdktrade.TradeTest()
+	sdktrade.TradeTest3()
+	// sdktrade.TradeTest2()
 }

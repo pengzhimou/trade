@@ -1,15 +1,7 @@
 package sdktrade
 
 import (
-	. "trade/showapiSdk/normalRequest"
-)
-
-const (
-	ShishiHangqingPiliang = "131-46"
-	ShishiHangqing        = "131-44"
-	LishiHangqing         = "131-47"
-	ShishiFenshixian      = "131-49"
-	ShishiKxian           = "131-50"
+	. "trade/showapiSDK/normalRequest"
 )
 
 type Auth struct {
