@@ -76,4 +76,5 @@ func RsiTest() {
 	}
 	fmt.Println(aaa.ResBody.List[0].Rsi24)
 }
-http://blog.codeg.cn/2014/12/27/gochart-info/
+
+// http://blog.codeg.cn/2014/12/27/gochart-info/
