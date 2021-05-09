@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/huobirdcenter/huobi_golang/config"
+	"trade/config"
+
 	"github.com/huobirdcenter/huobi_golang/logging/applogger"
 
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
