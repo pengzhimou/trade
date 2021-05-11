@@ -1,6 +1,6 @@
 package main
 
-import "trade/main/trade"
+import "trade/trade"
 
 func main() {
 	trade.RunAllExamplesMarket()
