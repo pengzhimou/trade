@@ -9,56 +9,56 @@ import (
 
 func RunAllExamplesMarket() {
 	// getCandlestick("cnnsusdt", market.MIN5, 5)
-	getLast24hCandlestickAskBid()
-	getLast24hCandlesticks()
-	// getDepth()
+	// aaa, _ := getLast24hCandlestickAskBid("cnnsusdt")
+	// aaa, _ := getLast24hCandlesticks()
+	getDepth()
 	// getLatestTrade()
 	// getHistoricalTrade()
 	// getLast24hCandlestick()
+
+	// fmt.Printf("%s\n", aaa[0])
+
 }
 
-//  Get the candlestick/kline for the stock.
+// 个股蜡烛图
 //  period: market.DAY1 market.MIN1 market.MIN5 market.MIN15 and so on
-func getCandlestick(stock, period string, size int) {
-	client := new(client.MarketClient).Init(config.Host)
 
+func GetCandlestick(stock, period string, size int) ([]market.Candlestick, error) {
+	client := new(client.MarketClient).Init(config.Host)
 	optionalRequest := market.GetCandlestickOptionalRequest{Period: period, Size: size}
 
 	resp, err := client.GetCandlestick(stock, optionalRequest)
-	if err != nil {
-		applogger.Error(err.Error())
-	} else {
-		for _, kline := range resp {
-			applogger.Info("Open=%v Close(Now)=%v High=%v Low=%v Vol=%v", kline.Open, kline.Close, kline.High, kline.Low, kline.Vol)
-		}
-	}
+	return resp, err
 }
 
+// 个股买1卖1
 //  Get the latest ticker with some important 24h aggregated market data for btcusdt.
-func getLast24hCandlestickAskBid() {
+// type CandlestickAskBid struct {
+// 	Amount  decimal.Decimal   `json:"amount"`
+// 	Open    decimal.Decimal   `json:"open"`
+// 	Close   decimal.Decimal   `json:"close"`
+// 	High    decimal.Decimal   `json:"high"`
+// 	Id      int64             `json:"id"`
+// 	Count   int64             `json:"count"`
+// 	Low     decimal.Decimal   `json:"low"`
+// 	Vol     decimal.Decimal   `json:"vol"`
+// 	Version int64             `json:"version"`
+// 	Bid     []decimal.Decimal `json:"bid"`
+// 	Ask     []decimal.Decimal `json:"ask"`
+// }
+//&{460691172.2855285 0.008927 0.007344 0.008927 201057703709 29868 0.007111 3619883.082731892 201057703709 [0.007322 3681.01] [0.007343 5152.78]}
+func getLast24hCandlestickAskBid(stock string) (*market.CandlestickAskBid, error) {
 	client := new(client.MarketClient).Init(config.Host)
-
-	resp, err := client.GetLast24hCandlestickAskBid("cnnsusdt")
-	if err != nil {
-		applogger.Error(err.Error())
-	} else {
-		applogger.Info("Bid=%+v, Ask=%+v", resp.Bid, resp.Ask)
-	}
+	resp, err := client.GetLast24hCandlestickAskBid(stock)
+	return resp, err
 }
 
-//  Get the latest tickers for all supported pairs
-func getLast24hCandlesticks() {
+// 全部股票价格，买1卖1感觉没啥用
+func getLast24hCandlesticks() ([]market.SymbolCandlestick, error) {
 	client := new(client.MarketClient).Init(config.Host)
 
 	resp, err := client.GetAllSymbolsLast24hCandlesticksAskBid()
-	if err != nil {
-		applogger.Error(err.Error())
-	} else {
-		for _, tick := range resp {
-			applogger.Info("Symbol: %s, High: %v, Low: %v, Ask[%v, %v], Bid[%v, %v]",
-				tick.Symbol, tick.High, tick.Low, tick.Ask, tick.AskSize, tick.Bid, tick.BidSize)
-		}
-	}
+	return resp, err
 }
 
 //  Get the current order book of the btcusdt.
@@ -80,7 +80,7 @@ func getDepth() {
 	}
 }
 
-//  Get the latest trade with btucsdt price, volume, and direction.
+// 买10卖10
 func getLatestTrade() {
 	client := new(client.MarketClient).Init(config.Host)
 
