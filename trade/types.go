@@ -59,3 +59,37 @@ package trade
 // 	Ask     decimal.Decimal `json:"ask"`
 // 	AskSize decimal.Decimal `json:"askSize"`
 // }
+
+// type GetDepthResponse struct {
+// 	Status string `json:"status"`
+// 	Ch     string `json:"ch"`
+// 	Ts     int64  `json:"ts"`
+// 	Tick   *Depth `json:"tick"`
+// }
+
+// type Depth struct {
+// 	Timestamp int64               `json:"ts"`
+// 	Version   int64               `json:"version"`
+// 	Bids      [][]decimal.Decimal `json:"bids"`
+// 	Asks      [][]decimal.Decimal `json:"asks"`
+// }
+
+// type GetLatestTradeResponse struct {
+// 	Status string     `json:"status"`
+// 	Ch     string     `json:"ch"`
+// 	Ts     int64      `json:"ts"`
+// 	Tick   *TradeTick `json:"tick"`
+// }
+
+// type TradeTick struct {
+// 	Id   int64 `json:"id"`
+// 	Ts   int64 `json:"ts"`
+// 	Data []struct {
+// 		Amount    decimal.Decimal `json:"amount"`
+// 		TradeId   int64           `json:"trade-id"`
+// 		Ts        int64           `json:"ts"`
+// 		Id        decimal.Decimal `json:"id"`
+// 		Price     decimal.Decimal `json:"price"`
+// 		Direction string          `json:"direction"`
+// 	}
+// }

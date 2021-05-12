@@ -11,12 +11,12 @@ func RunAllExamplesMarket() {
 	// getCandlestick("cnnsusdt", market.MIN5, 5)
 	// aaa, _ := getLast24hCandlestickAskBid("cnnsusdt")
 	// aaa, _ := getLast24hCandlesticks()
-	getDepth()
-	// getLatestTrade()
+	// aaa, _ := getDepth("btcusdt", 5)
+	// aaa, _ := getLatestTrade("cnnsusdt")
 	// getHistoricalTrade()
-	// getLast24hCandlestick()
+	getLast24hCandlestick()
 
-	// fmt.Printf("%s\n", aaa[0])
+	// fmt.Printf("%s\n", aaa)
 
 }
 
@@ -61,37 +61,41 @@ func getLast24hCandlesticks() ([]market.SymbolCandlestick, error) {
 	return resp, err
 }
 
-//  Get the current order book of the btcusdt.
-func getDepth() {
-	optionalRequest := market.GetDepthOptionalRequest{10}
+// 买N卖N
+// type Depth struct {
+// 	Timestamp int64               `json:"ts"`
+// 	Version   int64               `json:"version"`
+// 	Bids      [][]decimal.Decimal `json:"bids"`
+// 	Asks      [][]decimal.Decimal `json:"asks"`
+// }
+// &{1620834698905 127610781550 [[55549.13 0.457766] [55547.79 0.002] [55547.77 0.050946] [55547.24 1.05868] [55546.35 0.050634]] [[55549.14 0.17] [55551.89 0.0435] [55551.9 0.000386] [55551.91 0.0495] [55554.34 0.051]]}
+func getDepth(stock string, count int) (*market.Depth, error) {
+	optionalRequest := market.GetDepthOptionalRequest{count}
 	client := new(client.MarketClient).Init(config.Host)
-
-	resp, err := client.GetDepth("btcusdt", market.STEP0, optionalRequest)
-	if err != nil {
-		applogger.Error(err.Error())
-	} else {
-		for _, ask := range resp.Asks {
-			applogger.Info("ask: %+v", ask)
-		}
-		for _, bid := range resp.Bids {
-			applogger.Info("bid: %+v", bid)
-		}
-
-	}
+	resp, err := client.GetDepth(stock, market.STEP0, optionalRequest)
+	return resp, err
 }
 
-// 买10卖10
-func getLatestTrade() {
+// 最新成交价
+// type TradeTick struct {
+// 	Id   int64 `json:"id"`
+// 	Ts   int64 `json:"ts"`
+// 	Data []struct {
+// 		Amount    decimal.Decimal `json:"amount"`
+// 		TradeId   int64           `json:"trade-id"`
+// 		Ts        int64           `json:"ts"`
+// 		Id        decimal.Decimal `json:"id"`
+// 		Price     decimal.Decimal `json:"price"`
+// 		Direction string          `json:"direction"`
+// 	}
+// }
+// &{%!s(int64=100533462842) %!s(int64=1620835255045) [{1972.4 %!s(int64=100010984772) %!s(int64=1620835255045) 100533462842276050712135891 0.00771 buy} {5925.27 %!s(int64=100010984771) %!s(int64=1620835255045) 100533462842276050426753811 0.007695 buy}]}
+// &{%!s(int64=100533466966) %!s(int64=1620835318700) [{52.43 %!s(int64=100010984871) %!s(int64=1620835318700) 100533466966276046810652863 0.007631 sell} {11984.16 %!s(int64=100010984870) %!s(int64=1620835318700) 100533466966276053363660985 0.007634 sell} {7144.5 %!s(int64=100010984869) %!s(int64=1620835318700) 100533466966276046810651535 0.007635 sell}]}
+func getLatestTrade(stock string) (*market.TradeTick, error) {
 	client := new(client.MarketClient).Init(config.Host)
 
-	resp, err := client.GetLatestTrade("btcusdt")
-	if err != nil {
-		applogger.Error(err.Error())
-	} else {
-		for _, trade := range resp.Data {
-			applogger.Info("Id=%v, Price=%v", trade.Id, trade.Price)
-		}
-	}
+	resp, err := client.GetLatestTrade(stock)
+	return resp, err
 }
 
 //  Get the most recent trades with btcusdt price, volume, and direction.
