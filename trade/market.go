@@ -1,6 +1,9 @@
 package trade
 
-import "github.com/huobirdcenter/huobi_golang/pkg/client"
+import (
+	"github.com/huobirdcenter/huobi_golang/pkg/client"
+	"github.com/huobirdcenter/huobi_golang/pkg/model/common"
+)
 
 //不同的交易中心
 type MarketInfo interface {
@@ -12,9 +15,12 @@ type HuobiMarket struct {
 	Client *client.CommonClient
 }
 
-func (hm *HuobiMarket) GetAllSymbols() {
-	hm.Client.GetSymbols()
-
+func (hm *HuobiMarket) GetAllSymbols() []common.Symbol {
+	symbols, err := hm.Client.GetSymbols()
+	if err != nil {
+		klog.Error("Error of GetSymbols!", err)
+	}
+	return symbols
 }
 
 /////////////////////////////////////////////
