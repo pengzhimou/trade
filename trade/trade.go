@@ -12,7 +12,18 @@ import (
 	"github.com/huobirdcenter/huobi_golang/pkg/model/algoorder"
 )
 
-func placeOrder() {
+// {
+// 	"account-id": "16936884",
+// 	"symbol": "adausdt",
+// 	"type": "buy-limit",
+// 	"amount": "5",
+// 	"price": "1.9",
+// 	"source": "spot-api",
+// 	"client-order-id": "bbe84447-7ef6-4ffa-9cfb-1b2ad0452175",
+// 	"stop-price": "2.0",
+// 	"operator": "gte"
+//   }
+func OrderCreate() {
 	client := new(client.AlgoOrderClient).Init(config.AccessKey, config.SecretKey, config.Host)
 
 	accountId, _ := strconv.Atoi(config.AccountId)
@@ -40,7 +51,7 @@ func placeOrder() {
 	}
 }
 
-func cancelOder() {
+func OderCancle() {
 	client := new(client.AlgoOrderClient).Init(config.AccessKey, config.SecretKey, config.Host)
 	request := algoorder.CancelOrdersRequest{
 		ClientOrderIds: []string{"huobi1901"},
@@ -66,7 +77,7 @@ func cancelOder() {
 	}
 }
 
-func getOpenOrders() {
+func OrdersGetOpen() {
 	client := new(client.AlgoOrderClient).Init(config.AccessKey, config.SecretKey, config.Host)
 	request := new(model.GetRequest).Init()
 	request.AddParam("accountId", config.AccountId)
@@ -90,7 +101,7 @@ func getOpenOrders() {
 	}
 }
 
-func getHistoryOrders() {
+func OrdersHistory() {
 	client := new(client.AlgoOrderClient).Init(config.AccessKey, config.SecretKey, config.Host)
 	request := new(model.GetRequest).Init()
 	request.AddParam("symbol", "htusdt")
@@ -113,7 +124,7 @@ func getHistoryOrders() {
 	}
 }
 
-func getSpecificOrder() {
+func OrderGet() {
 	client := new(client.AlgoOrderClient).Init(config.AccessKey, config.SecretKey, config.Host)
 	request := new(model.GetRequest).Init()
 	request.AddParam("clientOrderId", "huobi1901")
