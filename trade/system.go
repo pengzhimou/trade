@@ -36,16 +36,19 @@ type HuobiSystem struct {
 //     "symbol-partition": "potentials",
 //     "value-precision": 8
 //   },]
-func (hs *HuobiSystem) GetAllSymbols() []common.Symbol {
+func (hs *HuobiSystem) GetAllSymbols() ([]common.Symbol, error) {
 	symbols, err := hs.Client.GetSymbols()
 	if err != nil {
 		applogger.Error("Error of GetSymbols!", err)
 	}
-	return symbols
+	return symbols, err
 }
 
-func (hs *HuobiSystem) GetAllUsdtTradeSymbols() map[string]map[string]interface{} {
-	allSymbols := hs.GetAllSymbols()
+func (hs *HuobiSystem) GetAllUsdtTradeSymbols() (map[string]map[string]interface{}, error) {
+	allSymbols, err := hs.GetAllSymbols()
+	if err != nil {
+		return nil, nil
+	}
 	usdtSymbls := map[string]map[string]interface{}{}
 	for _, symbol := range allSymbols {
 		if symbol.QuoteCurrency == "usdt" {
@@ -57,23 +60,23 @@ func (hs *HuobiSystem) GetAllUsdtTradeSymbols() map[string]map[string]interface{
 			}
 		}
 	}
-	return usdtSymbls
+	return usdtSymbls, err
 }
 
-func (hs *HuobiSystem) GetSystemStatus() *common.MarketStatus {
+func (hs *HuobiSystem) GetSystemStatus() (*common.MarketStatus, error) {
 	resp, err := hs.Client.GetMarketStatus()
 	if err != nil {
 		applogger.Error("Get market status error: %s", err)
 	} else {
 		applogger.Info("Get market status, status: %d", resp.MarketStatus)
 	}
-	return resp
+	return resp, err
 }
 
-func (hs *HuobiSystem) GetCurrencys() []string {
+func (hs *HuobiSystem) GetCurrencys() ([]string, error) {
 	resp, err := hs.Client.GetCurrencys()
 	if err != nil {
 		applogger.Error("Get currency error: %s", err)
 	}
-	return resp
+	return resp, err
 }
