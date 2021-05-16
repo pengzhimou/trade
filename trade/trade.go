@@ -12,14 +12,6 @@ import (
 	"github.com/huobirdcenter/huobi_golang/pkg/model/algoorder"
 )
 
-func RunAllExamplesTrade() {
-	// placeOrder()
-	getOpenOrders()
-	// getSpecificOrder()
-	cancelOder()
-	// getHistoryOrders()
-}
-
 func placeOrder() {
 	client := new(client.AlgoOrderClient).Init(config.AccessKey, config.SecretKey, config.Host)
 

@@ -33,7 +33,7 @@ type HuobiStock struct {
 // 	Low    decimal.Decimal `json:"low"`
 // 	Vol    decimal.Decimal `json:"vol"`
 // }
-// {
+// [{
 // "amount": "152888.14588048446",
 // "close": "0.149563",
 // "count": 63,
@@ -42,7 +42,7 @@ type HuobiStock struct {
 // "low": "0.1488",
 // "open": "0.149",
 // "vol": "22810.71191588"
-// }
+// }]
 //	client := new(client.MarketClient).Init(config.Host)
 func (hs *HuobiStock) GetCandleStick(stock string, period string, size int) ([]market.Candlestick, error) {
 	optionalRequest := market.GetCandlestickOptionalRequest{Period: period, Size: size}
@@ -54,6 +54,7 @@ func (hs *HuobiStock) GetCandleStick(stock string, period string, size int) ([]m
 }
 
 //
+// 与上面一致
 func (hs *HuobiStock) GetCandleStick24H(stock string) (*market.Candlestick, error) {
 	resp, err := hs.Client.GetLast24hCandlestick(stock)
 	if err != nil {
@@ -66,9 +67,34 @@ func (hs *HuobiStock) GetCandleStick24H(stock string) (*market.Candlestick, erro
 // type Depth struct {
 // 	Timestamp int64               `json:"ts"`
 // 	Version   int64               `json:"version"`
-// 	Bids      [][]decimal.Decimal `json:"bids"`
-// 	Asks      [][]decimal.Decimal `json:"asks"`
+// 	Bids      [][]decimal.Decimal `json:"bids"`   //买 高-低
+// 	Asks      [][]decimal.Decimal `json:"asks"`   //卖 低-高
 // }
+//Tips: count最小是5 最大20
+// {
+// 	"asks": [
+// 	  [
+// 		"0.159545",
+// 		"3760.69"
+// 	  ],
+// 	  [
+// 		"0.159546",
+// 		"1768.48"
+// 	  ],
+// 	],
+// 	"bids": [
+// 	  [
+// 		"0.159308",
+// 		"1900"
+// 	  ],
+// 	  [
+// 		"0.159283",
+// 		"3766.88"
+// 	  ],
+// 	],
+// 	"ts": "1621171160001",
+// 	"version": "101027481200"
+//   }
 func (hs *HuobiStock) GetBuyCellTick(stock string, count int) (*market.Depth, error) {
 	optionalRequest := market.GetDepthOptionalRequest{Size: count}
 	client := new(client.MarketClient).Init(config.Host)
@@ -89,8 +115,20 @@ func (hs *HuobiStock) GetBuyCellTick(stock string, count int) (*market.Depth, er
 // 		Direction string          `json:"direction"`
 // 	}
 // }
-// &{%!s(int64=100533462842) %!s(int64=1620835255045) [{1972.4 %!s(int64=100010984772) %!s(int64=1620835255045) 100533462842276050712135891 0.00771 buy} {5925.27 %!s(int64=100010984771) %!s(int64=1620835255045) 100533462842276050426753811 0.007695 buy}]}
-// &{%!s(int64=100533466966) %!s(int64=1620835318700) [{52.43 %!s(int64=100010984871) %!s(int64=1620835318700) 100533466966276046810652863 0.007631 sell} {11984.16 %!s(int64=100010984870) %!s(int64=1620835318700) 100533466966276053363660985 0.007634 sell} {7144.5 %!s(int64=100010984869) %!s(int64=1620835318700) 100533466966276046810651535 0.007635 sell}]}
+// {
+// 	"Data": [
+// 	  {
+// 		"amount": "51.41",
+// 		"direction": "sell",
+// 		"id": "101027500699277477829795329",
+// 		"price": "0.15937",
+// 		"trade-id": 6425270,
+// 		"ts": "1621171295037"
+// 	  }
+// 	],
+// 	"id": "101027500699",
+// 	"ts": "1621171295037"
+//   }]
 func (hs *HuobiStock) GetLatestTrade(stock string) (*market.TradeTick, error) {
 	resp, err := hs.Client.GetLatestTrade(stock)
 	return resp, err

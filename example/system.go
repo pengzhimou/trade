@@ -1,8 +1,6 @@
 package example
 
 import (
-	"encoding/json"
-	"fmt"
 	"trade/config"
 	"trade/trade"
 
@@ -23,21 +21,21 @@ var (
 )
 
 func Market_GetMarketStatus() {
-	fmt.Println(huobisystem.GetSystemStatus())
+	a5, _ := huobisystem.GetSystemStatus()
+	P(a5)
 }
 
 func Market_GetAllSymbols() {
-	aaa := huobisystem.GetAllSymbols()
-	aaaj, _ := json.Marshal(aaa)
-	fmt.Println(string(aaaj)[0])
+	a5, _ := huobisystem.GetAllSymbols()
+	P(a5)
 }
 
 func Market_GetAllUsdtTradeSymbols() {
-	aaa := huobisystem.GetAllUsdtTradeSymbols()
-	fmt.Println(aaa)
+	a5, _ := huobisystem.GetAllUsdtTradeSymbols()
+	P(a5)
 }
 
 func Market_GetCurrencys() {
-	aaa := huobisystem.GetCurrencys()
-	fmt.Println(aaa)
+	a5, _ := huobisystem.GetCurrencys()
+	P(a5)
 }

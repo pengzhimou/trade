@@ -1,7 +1,6 @@
 package example
 
 import (
-	"encoding/json"
 	"fmt"
 	"trade/config"
 	"trade/trade"
@@ -12,7 +11,10 @@ import (
 
 func Y() {
 	// Market_GetCandleStick()
-	Market_GetCandleStick24H()
+	// Market_GetCandleStick24H()
+	// Market_GetBuyCellTick()
+	// Market_GetLatestTrade()
+	Market_Bind()
 }
 
 var (
@@ -25,18 +27,29 @@ var (
 	day1  = market.DAY1
 )
 
-func P(s interface{}) string {
-	aaa, _ := json.Marshal(s)
-	rst := string(aaa)
-	fmt.Println(rst)
-	return (rst)
-}
-
 func Market_GetCandleStick() {
 	a5, _ := huobistock.GetCandleStick(stock, min5, 5)
 	P(a5)
 }
+
 func Market_GetCandleStick24H() {
 	a5, _ := huobistock.GetCandleStick24H(stock)
 	P(a5)
+}
+
+func Market_GetBuyCellTick() {
+	a5, _ := huobistock.GetBuyCellTick(stock, 5)
+	P(a5)
+}
+
+func Market_GetLatestTrade() {
+	a5, _ := huobistock.GetLatestTrade(stock)
+	P(a5)
+}
+
+func Market_Bind() {
+	a5, _ := huobistock.GetBuyCellTick(stock, 5)
+	fmt.Println(a5.Asks[0], a5.Bids[0])
+	a6, _ := huobistock.GetLatestTrade(stock)
+	fmt.Println(a6.Data)
 }
