@@ -1,15 +1,8 @@
 package main
 
-import (
-	"trade/trade"
-)
+import "trade/example"
 
 func main() {
-
-	// for {
-	// 	trade.RunAllExamplesMarket()
-	// 	time.Sleep(time.Millisecond * 500)
-	// }
-	trade.RunAllExamplesMarket()
-
+	// example.X()
+	example.Y()
 }
