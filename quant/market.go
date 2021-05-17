@@ -13,7 +13,7 @@ import (
 type StockInfo interface {
 	GetLast24hCandlestick()
 	GetCandleStick()
-	GetBuyCellTick()
+	GetBuySellTick()
 }
 
 //Huobi股票
@@ -95,7 +95,7 @@ func (hs *HuobiStock) GetCandleStick24H(stock string) (*market.Candlestick, erro
 // 	"ts": "1621171160001",
 // 	"version": "101027481200"
 //   }
-func (hs *HuobiStock) GetBuyCellTick(stock string, count int) (*market.Depth, error) {
+func (hs *HuobiStock) GetBuySellTick(stock string, count int) (*market.Depth, error) {
 	optionalRequest := market.GetDepthOptionalRequest{Size: count}
 	client := new(client.MarketClient).Init(config.Host)
 	resp, err := client.GetDepth(stock, market.STEP0, optionalRequest)

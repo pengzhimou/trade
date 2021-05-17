@@ -3,6 +3,7 @@ package example
 import (
 	"trade/config"
 	"trade/quant"
+	"trade/utils"
 
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
 )
@@ -22,20 +23,20 @@ var (
 
 func Market_GetMarketStatus() {
 	a5, _ := huobisystem.GetSystemStatus()
-	P(a5)
+	utils.P(a5)
 }
 
 func Market_GetAllSymbols() {
 	a5, _ := huobisystem.GetAllSymbols()
-	P(a5)
+	utils.P(a5)
 }
 
 func Market_GetAllUsdtTradeSymbols() {
 	a5, _ := huobisystem.GetAllUsdtTradeSymbols()
-	P(a5)
+	utils.P(a5)
 }
 
 func Market_GetCurrencys() {
 	a5, _ := huobisystem.GetCurrencys()
-	P(a5)
+	utils.P(a5)
 }

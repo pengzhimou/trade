@@ -2,7 +2,7 @@ package quant
 
 import "github.com/huobirdcenter/huobi_golang/pkg/model/market"
 
-type BuyCell struct {
+type BuySell struct {
 }
 
 type Stock struct {
@@ -10,7 +10,7 @@ type Stock struct {
 	CandleDay    []market.Candlestick
 	CandleVMin   []market.Candlestick
 	CandleVVVMin []market.Candlestick
-	BuyCellTick  []BuyCell
+	BuySellTick  []BuySell
 }
 
 func (s *Stock) DrawVMin(count int) {
@@ -25,6 +25,6 @@ func (s *Stock) DrawDay(count int) {
 
 }
 
-func (s *Stock) DrawBuyCellBalance() {
+func (s *Stock) DrawBuySellBalance() {
 
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"trade/config"
 	"trade/quant"
+	"trade/utils"
 
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
 	"github.com/huobirdcenter/huobi_golang/pkg/model/market"
@@ -12,7 +13,7 @@ import (
 func Y() {
 	// Market_GetCandleStick()
 	// Market_GetCandleStick24H()
-	// Market_GetBuyCellTick()
+	// Market_GetBuySellTick()
 	// Market_GetLatestTrade()
 	Market_Bind()
 }
@@ -29,26 +30,26 @@ var (
 
 func Market_GetCandleStick() {
 	a5, _ := huobistock.GetCandleStick(stock, min5, 5)
-	P(a5)
+	utils.P(a5)
 }
 
 func Market_GetCandleStick24H() {
 	a5, _ := huobistock.GetCandleStick24H(stock)
-	P(a5)
+	utils.P(a5)
 }
 
-func Market_GetBuyCellTick() {
-	a5, _ := huobistock.GetBuyCellTick(stock, 5)
-	P(a5)
+func Market_GetBuySellTick() {
+	a5, _ := huobistock.GetBuySellTick(stock, 5)
+	utils.P(a5)
 }
 
 func Market_GetLatestTrade() {
 	a5, _ := huobistock.GetLatestTrade(stock)
-	P(a5)
+	utils.P(a5)
 }
 
 func Market_Bind() {
-	a5, _ := huobistock.GetBuyCellTick(stock, 5)
+	a5, _ := huobistock.GetBuySellTick(stock, 5)
 	fmt.Println(a5.Asks[0], a5.Bids[0])
 	a6, _ := huobistock.GetLatestTrade(stock)
 	fmt.Println(a6.Data)

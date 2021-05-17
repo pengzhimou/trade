@@ -30,6 +30,6 @@ func (hw *HuobiWallet) ForceBuy() {
 }
 
 //止损
-func (hw *HuobiWallet) ForceCell() {
+func (hw *HuobiWallet) ForceSell() {
 
 }
