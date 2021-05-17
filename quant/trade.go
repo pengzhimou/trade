@@ -64,13 +64,13 @@ type HuobiAlgo struct {
 // 	"stop-price": "2.0",
 // 	"operator": "gte"
 //   }
-func (ha *HuobiAlgo) OrderCreate(symbol, limitmarket, buysell, amount, startprice, stopprice string) (algoorder.PlaceOrderRequest, *algoorder.PlaceOrderResponse, error) {
+func (ha *HuobiAlgo) OrderCreate(stock, limitmarket, buysell, amount, startprice, stopprice string) (algoorder.PlaceOrderRequest, *algoorder.PlaceOrderResponse, error) {
 
 	accountId, _ := strconv.Atoi(config.AccountId)
 	fmt.Println(accountId)
 	request := algoorder.PlaceOrderRequest{
 		AccountId:     accountId,
-		Symbol:        symbol,      // adausdt
+		Symbol:        stock,       // adausdt
 		OrderType:     limitmarket, // limit/market
 		OrderSize:     amount,      // "6"
 		OrderPrice:    startprice,  // "2.0"
@@ -116,9 +116,9 @@ func (ha *HuobiAlgo) OrdersGetOpen() (*algoorder.GetOpenOrdersResponse, error) {
 	return resp, err
 }
 
-func (ha *HuobiAlgo) OrdersHistory() (*algoorder.GetHistoryOrdersResponse, error) {
+func (ha *HuobiAlgo) OrdersHistory(stock string) (*algoorder.GetHistoryOrdersResponse, error) {
 	request := new(model.GetRequest).Init()
-	request.AddParam("symbol", "htusdt")
+	request.AddParam("symbol", stock)
 	request.AddParam("orderStatus", "canceled")
 
 	resp, err := ha.Client.GetHistoryOrders(request)
