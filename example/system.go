@@ -2,7 +2,7 @@ package example
 
 import (
 	"trade/config"
-	"trade/trade"
+	"trade/quant"
 
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
 )
@@ -15,7 +15,7 @@ func X() {
 }
 
 var (
-	huobisystem trade.HuobiSystem = trade.HuobiSystem{
+	huobisystem = quant.HuobiSystem{
 		Client: new(client.CommonClient).Init(config.Host),
 	}
 )

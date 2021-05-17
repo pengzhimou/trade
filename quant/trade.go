@@ -1,10 +1,9 @@
-package trade
+package quant
 
 import (
 	"fmt"
 	"strconv"
 	"trade/config"
-	"trade/example"
 
 	"github.com/huobirdcenter/huobi_golang/logging/applogger"
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
@@ -89,7 +88,7 @@ func OrdersGetOpen() {
 	} else {
 		if resp.Code == 200 {
 			if resp.Data != nil {
-				example.P(resp)
+				// example.P(resp)
 				applogger.Info("There are total %d open orders", len(resp.Data))
 				for _, o := range resp.Data {
 					applogger.Info("Open orders, cid: %s, symbol: %s, status: %s", o.ClientOrderId, o.Symbol, o.OrderStatus)

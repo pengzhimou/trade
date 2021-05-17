@@ -1,4 +1,4 @@
-package trade
+package quant
 
 import (
 	"trade/config"

@@ -3,7 +3,7 @@ package example
 import (
 	"fmt"
 	"trade/config"
-	"trade/trade"
+	"trade/quant"
 
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
 	"github.com/huobirdcenter/huobi_golang/pkg/model/market"
@@ -18,7 +18,7 @@ func Y() {
 }
 
 var (
-	huobistock = trade.HuobiStock{
+	huobistock = quant.HuobiStock{
 		Client: new(client.MarketClient).Init(config.Host),
 	}
 	stock = "oneusdt"

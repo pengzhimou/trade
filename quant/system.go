@@ -1,4 +1,4 @@
-package trade
+package quant
 
 import (
 	"github.com/huobirdcenter/huobi_golang/logging/applogger"
