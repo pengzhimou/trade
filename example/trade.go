@@ -7,6 +7,7 @@ import (
 	"trade/utils"
 
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
+	"github.com/huobirdcenter/huobi_golang/pkg/model/algoorder"
 )
 
 var (
@@ -17,7 +18,7 @@ var (
 
 func Z() {
 	Trade_Mix()
-	// 	Trade_OrderCreate()
+	Trade_OrderCreate()
 	Trade_OrdersGetOpen()
 	Trade_OrdersHistory()
 	// Trade_OrdersGet()
@@ -26,7 +27,19 @@ func Z() {
 
 func Trade_OrderCreate() {
 	fmt.Println("@@@@@@@@@@Trade_OrderCreate")
-	aaa, bbb, _ := huobialgo.OrderCreate("adausdt", "limit", "buy", "5", "1.9", "2.0")
+	orderRequest := algoorder.PlaceOrderRequest{
+		Symbol:     "adausdt", // adausdt
+		OrderType:  "limit",   // limit/market
+		OrderSize:  "5",       // "6"
+		OrderPrice: "1.5",     // "2.0"
+		OrderSide:  "buy",     // buy/sell
+		// TimeInForce:   "gtc",
+		ClientOrderId: utils.GenUUID(),
+		// StopPrice:     stopprice, // stopprice
+		// TrailingRate:  "",
+	}
+
+	aaa, bbb, _ := huobialgo.OrderCreate(orderRequest)
 	utils.P(aaa)
 	utils.P(bbb)
 }
@@ -39,7 +52,7 @@ func Trade_OrdersGetOpen() {
 
 func Trade_OrdersHistory() {
 	fmt.Println("@@@@@@@@@@Trade_OrdersHistory")
-	aaa, _ := huobialgo.OrdersHistory()
+	aaa, _ := huobialgo.OrdersHistory("adausdt")
 	utils.P(aaa)
 }
 

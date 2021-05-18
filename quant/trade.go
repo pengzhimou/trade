@@ -1,7 +1,6 @@
 package quant
 
 import (
-	"fmt"
 	"strconv"
 	"trade/config"
 	"trade/utils"
@@ -64,10 +63,9 @@ type HuobiAlgo struct {
 // 	"stop-price": "2.0",
 // 	"operator": "gte"
 //   }
-func (ha *HuobiAlgo) OrderCreate(stock, limitmarket, buysell, amount, startprice, stopprice string) (algoorder.PlaceOrderRequest, *algoorder.PlaceOrderResponse, error) {
+func (ha *HuobiAlgo) OrderCreateOld(stock, limitmarket, buysell, amount, startprice, stopprice string) (algoorder.PlaceOrderRequest, *algoorder.PlaceOrderResponse, error) {
 
 	accountId, _ := strconv.Atoi(config.AccountId)
-	fmt.Println(accountId)
 	request := algoorder.PlaceOrderRequest{
 		AccountId:     accountId,
 		Symbol:        stock,       // adausdt
@@ -91,6 +89,23 @@ func (ha *HuobiAlgo) OrderCreate(stock, limitmarket, buysell, amount, startprice
 		}
 	}
 	return request, resp, err
+}
+
+func (ha *HuobiAlgo) OrderCreate(orderRequest algoorder.PlaceOrderRequest) (algoorder.PlaceOrderRequest, *algoorder.PlaceOrderResponse, error) {
+
+	accountId, _ := strconv.Atoi(config.AccountId)
+	orderRequest.AccountId = accountId
+	resp, err := ha.Client.PlaceOrder(&orderRequest)
+	if err != nil {
+		applogger.Error(err.Error())
+	} else {
+		if resp.Code == 200 {
+			applogger.Info("Place algo order successfully, client order id: %s", resp.Data.ClientOrderId)
+		} else {
+			applogger.Error("Place algo order error, code: %d, message: %s", resp.Code, resp.Message)
+		}
+	}
+	return orderRequest, resp, err
 }
 
 func (ha *HuobiAlgo) OrdersGetOpen() (*algoorder.GetOpenOrdersResponse, error) {
