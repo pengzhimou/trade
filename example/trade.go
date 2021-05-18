@@ -17,10 +17,10 @@ var (
 )
 
 func Z() {
-	Trade_Mix()
+	// Trade_Mix()
 	Trade_OrderCreate()
-	Trade_OrdersGetOpen()
-	Trade_OrdersHistory()
+	// Trade_OrdersGetOpen()
+	// Trade_OrdersHistory()
 	// Trade_OrdersGet()
 	// Trade_OderCancle()
 }
@@ -28,14 +28,14 @@ func Z() {
 func Trade_OrderCreate() {
 	fmt.Println("@@@@@@@@@@Trade_OrderCreate")
 	orderRequest := algoorder.PlaceOrderRequest{
-		Symbol:     "adausdt", // adausdt
-		OrderType:  "limit",   // limit/market
-		OrderSize:  "5",       // "6"
-		OrderPrice: "1.5",     // "2.0"
-		OrderSide:  "buy",     // buy/sell
-		// TimeInForce:   "gtc",
+		Symbol:        "adausdt", // adausdt
+		OrderType:     "limit",   // limit/market
+		OrderSize:     "5",       // "6"
+		OrderPrice:    "1.5",     // "2.0"
+		OrderSide:     "buy",     // buy/sell
+		TimeInForce:   "gtc",
 		ClientOrderId: utils.GenUUID(),
-		// StopPrice:     stopprice, // stopprice
+		StopPrice:     "1.4", // stopprice
 		// TrailingRate:  "",
 	}
 

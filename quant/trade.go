@@ -108,6 +108,29 @@ func (ha *HuobiAlgo) OrderCreate(orderRequest algoorder.PlaceOrderRequest) (algo
 	return orderRequest, resp, err
 }
 
+// func placeOrder() {
+// 	client := new(client.OrderClient).Init(config.AccessKey, config.SecretKey, config.Host)
+// 	request := order.PlaceOrderRequest{
+// 		AccountId: config.AccountId,
+// 		Type:      "buy-limit",
+// 		Source:    "spot-api",
+// 		Symbol:    "btcusdt",
+// 		Price:     "1.1",
+// 		Amount:    "1",
+// 	}
+// 	resp, err := client.PlaceOrder(&request)
+// 	if err != nil {
+// 		applogger.Error(err.Error())
+// 	} else {
+// 		switch resp.Status {
+// 		case "ok":
+// 			applogger.Info("Place order successfully, order id: %s", resp.Data)
+// 		case "error":
+// 			applogger.Error("Place order error: %s", resp.ErrorMessage)
+// 		}
+// 	}
+// }
+
 func (ha *HuobiAlgo) OrdersGetOpen() (*algoorder.GetOpenOrdersResponse, error) {
 	request := new(model.GetRequest).Init()
 	request.AddParam("accountId", config.AccountId)
@@ -154,6 +177,31 @@ func (ha *HuobiAlgo) OrdersHistory(stock string) (*algoorder.GetHistoryOrdersRes
 	return resp, err
 }
 
+// {
+// 	"Data": {
+// 	  "accountId": 25997946,
+// 	  "clientOrderId": "a4d57783-4919-43ce-b4c4-f064e2fd2e30",
+// 	  "errCode": 0,
+// 	  "errMessage": "",
+// 	  "lastActTime": "1621352033882",
+// 	  "orderCreateTime": 0,
+// 	  "orderId": "",
+// 	  "orderOrigTime": "1621352033688",
+// 	  "orderPrice": "1.5",
+// 	  "orderSide": "buy",
+// 	  "orderSize": "5",
+// 	  "orderStatus": "created",
+// 	  "orderType": "limit",
+// 	  "orderValue": "",
+// 	  "source": "api",
+// 	  "stopPrice": "1.5",
+// 	  "symbol": "adausdt",
+// 	  "timeInForce": "gtc",
+// 	  "trailingRate": ""
+// 	},
+// 	"code": 200,
+// 	"message": ""
+//   }
 func (ha *HuobiAlgo) OrderGet(orderId string) (*algoorder.GetSpecificOrderResponse, error) {
 	request := new(model.GetRequest).Init()
 	request.AddParam("clientOrderId", orderId)
