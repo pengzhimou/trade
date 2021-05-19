@@ -3,13 +3,173 @@ package quant
 import (
 	"strconv"
 	"trade/config"
-	"trade/utils"
 
 	"github.com/huobirdcenter/huobi_golang/logging/applogger"
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
 	"github.com/huobirdcenter/huobi_golang/pkg/model"
 	"github.com/huobirdcenter/huobi_golang/pkg/model/algoorder"
+	"github.com/huobirdcenter/huobi_golang/pkg/model/order"
 )
+
+type HuobiTrade struct {
+	Client *client.OrderClient
+}
+
+func (ht *HuobiTrade) OrderCreate(orderRequest order.PlaceOrderRequest) (*order.PlaceOrderResponse, error) {
+	resp, err := ht.Client.PlaceOrder(&orderRequest)
+	if err != nil {
+		applogger.Error(err.Error())
+	} else {
+		switch resp.Status {
+		case "ok":
+			applogger.Info("Place order successfully, order id: %s", resp.Data)
+		case "error":
+			applogger.Error("Place order error: %s", resp.ErrorMessage)
+		}
+	}
+	return resp, err
+}
+
+func (ht *HuobiTrade) OrdersCreate(ordersRequest []order.PlaceOrderRequest) (*order.PlaceOrdersResponse, error) {
+	resp, err := ht.Client.PlaceOrders(ordersRequest)
+	if err != nil {
+		applogger.Error(err.Error())
+	} else {
+		switch resp.Status {
+		case "ok":
+			if resp.Data != nil {
+				for _, r := range resp.Data {
+					if r.OrderId != 0 {
+						applogger.Info("Place order successfully: order id %d", r.OrderId)
+					} else {
+						applogger.Info("Place order error: %s", r.ErrorMessage)
+					}
+				}
+			}
+		case "error":
+			applogger.Error("Place order error: %s", resp.ErrorMessage)
+		}
+	}
+	return resp, err
+}
+
+func (ht *HuobiTrade) OrderGetOpen(stock string) (*order.GetOpenOrdersResponse, error) {
+	request := new(model.GetRequest).Init()
+	request.AddParam("account-id", GetSpotAccountID())
+	request.AddParam("symbol", stock)
+	resp, err := ht.Client.GetOpenOrders(request)
+	if err != nil {
+		applogger.Error(err.Error())
+	} else {
+		switch resp.Status {
+		case "ok":
+			if resp.Data != nil {
+				for _, o := range resp.Data {
+					applogger.Info("Open orders, symbol: %s, price: %s, amount: %s", o.Symbol, o.Price, o.Amount)
+				}
+				applogger.Info("There are total %d open orders", len(resp.Data))
+			}
+		case "error":
+			applogger.Error("Get open order error: %s", resp.ErrorMessage)
+		}
+	}
+	return resp, err
+}
+
+func (ht *HuobiTrade) OrderGetHistory(stock, state string) (*order.GetHistoryOrdersResponse, error) {
+	request := new(model.GetRequest).Init()
+	request.AddParam("symbol", stock)
+	request.AddParam("states", state)
+	resp, err := ht.Client.GetHistoryOrders(request)
+	if err != nil {
+		applogger.Error(err.Error())
+	} else {
+		switch resp.Status {
+		case "ok":
+			if resp.Data != nil {
+				for _, o := range resp.Data {
+					applogger.Info("Order history, symbol: %s, price: %s, amount: %s, state: %s", o.Symbol, o.Price, o.Amount, o.State)
+				}
+				applogger.Info("There are total %d orders", len(resp.Data))
+			}
+		case "error":
+			applogger.Error("Get history order error: %s", resp.ErrorMessage)
+		}
+	}
+	return resp, err
+}
+
+func (ht *HuobiTrade) OrderGet(orderId string) (*order.GetOrderResponse, error) {
+	resp, err := ht.Client.GetOrderById(orderId)
+	if err != nil {
+		applogger.Error(err.Error())
+	} else {
+		switch resp.Status {
+		case "ok":
+			if resp.Data != nil {
+				o := resp.Data
+				applogger.Info("Get order, symbol: %s, price: %s, amount: %s, filled amount: %s, filled cash amount: %s, filled fees: %s",
+					o.Symbol, o.Price, o.Amount, o.FilledAmount, o.FilledCashAmount, o.FilledFees)
+			}
+		case "error":
+			applogger.Error("Get order by id error: %s", resp.ErrorMessage)
+		}
+	}
+	return resp, err
+}
+
+func (ht *HuobiTrade) OrderCancle(orderId string) (*order.CancelOrderByIdResponse, error) {
+	resp, err := ht.Client.CancelOrderById(orderId)
+	if err != nil {
+		applogger.Error(err.Error())
+	} else {
+		switch resp.Status {
+		case "ok":
+			applogger.Info("Cancel order successfully, order id: %s", resp.Data)
+		case "error":
+			applogger.Info("Cancel order error: %s", resp.ErrorMessage)
+		}
+	}
+	return resp, err
+}
+
+// //??????????
+// func (ht *HuobiTrade) OrderCancleByClient(orderId string) (*order.CancelOrderByClientResponse, error) {
+// 	resp, err := ht.Client.CancelOrderByClientOrderId(orderId)
+// 	if err != nil {
+// 		applogger.Error(err.Error())
+// 	} else {
+// 		switch resp.Status {
+// 		case "ok":
+// 			applogger.Info("Cancel order successfully, order id: %d", resp.Data)
+// 		case "error":
+// 			applogger.Info("Cancel order error: %s", resp.ErrorMessage)
+// 		}
+// 	}
+// 	return resp, err
+// }
+
+// // cancelRequest := order.CancelOrdersByCriteriaRequest{
+// // 	AccountId: config.AccountId,
+// // 	Symbol:    "btcusdt",
+// // }
+// func (ht *HuobiTrade) OrderCancelByCriteria(cancelRequest order.CancelOrdersByCriteriaRequest) (*order.CancelOrdersByCriteriaResponse, error) {
+// 	resp, err := ht.Client.CancelOrdersByCriteria(&cancelRequest)
+// 	if err != nil {
+// 		applogger.Error(err.Error())
+// 	} else {
+// 		switch resp.Status {
+// 		case "ok":
+// 			if resp.Data != nil {
+// 				d := resp.Data
+// 				applogger.Info("Cancel orders successfully, success count: %d, failed count: %d, next id: %d", d.SuccessCount, d.FailedCount, d.NextId)
+// 			}
+// 		case "error":
+// 			applogger.Error("Cancel orders error: %s", resp.ErrorMessage)
+// 		}
+// 	}
+// 	return resp, err
+// }
 
 // @@@@@@@@@@Trade_OrderCreate
 // 25997946
@@ -63,34 +223,6 @@ type HuobiAlgo struct {
 // 	"stop-price": "2.0",
 // 	"operator": "gte"
 //   }
-func (ha *HuobiAlgo) OrderCreateOld(stock, limitmarket, buysell, amount, startprice, stopprice string) (algoorder.PlaceOrderRequest, *algoorder.PlaceOrderResponse, error) {
-
-	accountId, _ := strconv.Atoi(config.AccountId)
-	request := algoorder.PlaceOrderRequest{
-		AccountId:     accountId,
-		Symbol:        stock,       // adausdt
-		OrderType:     limitmarket, // limit/market
-		OrderSize:     amount,      // "6"
-		OrderPrice:    startprice,  // "2.0"
-		OrderSide:     buysell,     // buy/sell
-		TimeInForce:   "gtc",
-		ClientOrderId: utils.GenUUID(),
-		StopPrice:     stopprice, // stopprice
-		// TrailingRate:  "",
-	}
-	resp, err := ha.Client.PlaceOrder(&request)
-	if err != nil {
-		applogger.Error(err.Error())
-	} else {
-		if resp.Code == 200 {
-			applogger.Info("Place algo order successfully, client order id: %s", resp.Data.ClientOrderId)
-		} else {
-			applogger.Error("Place algo order error, code: %d, message: %s", resp.Code, resp.Message)
-		}
-	}
-	return request, resp, err
-}
-
 func (ha *HuobiAlgo) OrderCreate(orderRequest algoorder.PlaceOrderRequest) (algoorder.PlaceOrderRequest, *algoorder.PlaceOrderResponse, error) {
 
 	accountId, _ := strconv.Atoi(config.AccountId)
