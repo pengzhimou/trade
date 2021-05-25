@@ -11,9 +11,10 @@ import (
 /////////////////////////////////////////////
 //不同的交易中心
 type StockInfo interface {
-	GetLast24hCandlestick()
-	GetCandleStick()
-	GetBuySellTick()
+	GetCandleStick24H(stock string) (*market.Candlestick, error)
+	GetCandleStick(stock string, period string, size int) ([]market.Candlestick, error)
+	GetBuySellTick(stock string, count int) (*market.Depth, error)
+	GetLatestTrade(stock string) (*market.TradeTick, error)
 }
 
 //Huobi股票

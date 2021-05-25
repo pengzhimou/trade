@@ -8,9 +8,9 @@ import (
 
 //不同的交易中心
 type SystemInfo interface {
-	GetAllSymbols() []common.Symbol
-	GetSystemStatus() *common.MarketStatus
-	GetAllUsdtTradeSymbols() map[string]map[string]interface{}
+	GetAllSymbols() ([]common.Symbol, error)
+	GetSystemStatus() (*common.MarketStatus, error)
+	GetAllUsdtTradeSymbols() (map[string]map[string]interface{}, error)
 }
 
 //Huobi交易中心

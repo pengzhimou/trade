@@ -2,6 +2,7 @@ package main
 
 import (
 	"trade/config"
+	"trade/quant/spidernet"
 
 	"github.com/huobirdcenter/huobi_golang/logging/applogger"
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
@@ -37,6 +38,7 @@ func main() {
 	// example.Y()
 	// example.Z()
 
-	placeOrder()
+	// placeOrder()
+	spidernet.Run()
 
 }
