@@ -3,35 +3,36 @@ package spidernet
 import (
 	"fmt"
 	"trade/config"
-	"trade/quant"
+	. "trade/quant"
 
 	"github.com/huobirdcenter/huobi_golang/logging/applogger"
 	"github.com/huobirdcenter/huobi_golang/pkg/client"
+	"github.com/huobirdcenter/huobi_golang/pkg/model/market"
 	"github.com/shopspring/decimal"
 )
 
 var (
-	huobisystem = quant.HuobiSystem{
+	huobisystem = HuobiSystem{
 		Client: new(client.CommonClient).Init(config.Host),
 	}
-	huobistock = quant.HuobiStock{
+	huobimarket = HuobiMarket{
 		Client: new(client.MarketClient).Init(config.Host),
 	}
-	huobialgo = quant.HuobiAlgo{
+	huobialgo = HuobiAlgo{
 		Client: new(client.AlgoOrderClient).Init(config.AccessKey, config.SecretKey, config.Host),
 	}
 
 	// systemInfo quant.SystemInfo
 )
 
-func (*SpiderNet) GetSystemStatus(systemInfo quant.SystemInfo) {
+func (*SpiderNet) GetSystemStatus(systemInfo SystemInfo) {
 	_, err := systemInfo.GetSystemStatus()
 	if err != nil {
 		panic("Trade System Not Avalable.")
 	}
 }
 
-func (*SpiderNet) GetAllUsdtTradeSymbols(systemInfo quant.SystemInfo) map[string]map[string]interface{} {
+func (*SpiderNet) GetAllUsdtTradeSymbols(systemInfo SystemInfo) map[string]map[string]interface{} {
 	symbols, err := systemInfo.GetAllUsdtTradeSymbols()
 	if err != nil {
 		applogger.Error("Get market status error: %s", err)
@@ -39,7 +40,7 @@ func (*SpiderNet) GetAllUsdtTradeSymbols(systemInfo quant.SystemInfo) map[string
 	return symbols
 }
 
-func (s *SpiderNet) Update30DAllStockCandleStick(systemInfo quant.SystemInfo, stockInfo quant.StockInfo) {
+func (s *SpiderNet) GetAllAvaliableStock(systemInfo SystemInfo, stockInfo MarketInfo) map[string]decimal.Decimal {
 	s.GetSystemStatus(systemInfo)
 	allstocks := s.GetAllUsdtTradeSymbols(systemInfo)
 	goodstocks := map[string]decimal.Decimal{}
@@ -48,11 +49,25 @@ func (s *SpiderNet) Update30DAllStockCandleStick(systemInfo quant.SystemInfo, st
 			goodstocks[stock] = value["min-order-value"].(decimal.Decimal)
 		}
 	}
-	fmt.Println(goodstocks)
+	return goodstocks
+}
+
+func (s *SpiderNet) GetStock24HRiseFall(stk Stock, mktInfo MarketInfo) *market.Candlestick {
+	candle, err := mktInfo.GetCandleStick24H(stk.Name)
+	if err != nil {
+		applogger.Error("Get GetStock24HRiseFall error: %s", err)
+	}
+	return candle
 
 }
 
 func Run() {
 	ss := SpiderNet{}
-	ss.Update30DAllStockCandleStick(&huobisystem, &huobistock)
+	stocks := ss.GetAllAvaliableStock(&huobisystem, &huobimarket)
+	for stock := range stocks {
+		stk := Stock{
+			Name: stock,
+		}
+		fmt.Println(ss.GetStock24HRiseFall(stk, &huobimarket))
+	}
 }

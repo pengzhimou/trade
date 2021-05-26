@@ -10,7 +10,7 @@ import (
 
 /////////////////////////////////////////////
 //不同的交易中心
-type StockInfo interface {
+type MarketInfo interface {
 	GetCandleStick24H(stock string) (*market.Candlestick, error)
 	GetCandleStick(stock string, period string, size int) ([]market.Candlestick, error)
 	GetBuySellTick(stock string, count int) (*market.Depth, error)
@@ -18,7 +18,7 @@ type StockInfo interface {
 }
 
 //Huobi股票
-type HuobiStock struct {
+type HuobiMarket struct {
 	Client *client.MarketClient
 }
 
@@ -45,7 +45,7 @@ type HuobiStock struct {
 // "vol": "22810.71191588"
 // }]
 //	client := new(client.MarketClient).Init(config.Host)
-func (hs *HuobiStock) GetCandleStick(stock string, period string, size int) ([]market.Candlestick, error) {
+func (hs *HuobiMarket) GetCandleStick(stock string, period string, size int) ([]market.Candlestick, error) {
 	optionalRequest := market.GetCandlestickOptionalRequest{Period: period, Size: size}
 	resp, err := hs.Client.GetCandlestick(stock, optionalRequest)
 	if err != nil {
@@ -56,7 +56,7 @@ func (hs *HuobiStock) GetCandleStick(stock string, period string, size int) ([]m
 
 //
 // 与上面一致
-func (hs *HuobiStock) GetCandleStick24H(stock string) (*market.Candlestick, error) {
+func (hs *HuobiMarket) GetCandleStick24H(stock string) (*market.Candlestick, error) {
 	resp, err := hs.Client.GetLast24hCandlestick(stock)
 	if err != nil {
 		applogger.Error(err.Error())
@@ -96,7 +96,7 @@ func (hs *HuobiStock) GetCandleStick24H(stock string) (*market.Candlestick, erro
 // 	"ts": "1621171160001",
 // 	"version": "101027481200"
 //   }
-func (hs *HuobiStock) GetBuySellTick(stock string, count int) (*market.Depth, error) {
+func (hs *HuobiMarket) GetBuySellTick(stock string, count int) (*market.Depth, error) {
 	optionalRequest := market.GetDepthOptionalRequest{Size: count}
 	client := new(client.MarketClient).Init(config.Host)
 	resp, err := client.GetDepth(stock, market.STEP0, optionalRequest)
@@ -130,7 +130,7 @@ func (hs *HuobiStock) GetBuySellTick(stock string, count int) (*market.Depth, er
 // 	"id": "101027500699",
 // 	"ts": "1621171295037"
 //   }]
-func (hs *HuobiStock) GetLatestTrade(stock string) (*market.TradeTick, error) {
+func (hs *HuobiMarket) GetLatestTrade(stock string) (*market.TradeTick, error) {
 	resp, err := hs.Client.GetLatestTrade(stock)
 	return resp, err
 }

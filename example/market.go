@@ -19,7 +19,7 @@ func Y() {
 }
 
 var (
-	huobistock = quant.HuobiStock{
+	huobimarket = quant.HuobiMarket{
 		Client: new(client.MarketClient).Init(config.Host),
 	}
 	stock = "oneusdt"
@@ -29,28 +29,28 @@ var (
 )
 
 func Market_GetCandleStick() {
-	a5, _ := huobistock.GetCandleStick(stock, min5, 5)
+	a5, _ := huobimarket.GetCandleStick(stock, min5, 5)
 	utils.P(a5)
 }
 
 func Market_GetCandleStick24H() {
-	a5, _ := huobistock.GetCandleStick24H(stock)
+	a5, _ := huobimarket.GetCandleStick24H(stock)
 	utils.P(a5)
 }
 
 func Market_GetBuySellTick() {
-	a5, _ := huobistock.GetBuySellTick(stock, 5)
+	a5, _ := huobimarket.GetBuySellTick(stock, 5)
 	utils.P(a5)
 }
 
 func Market_GetLatestTrade() {
-	a5, _ := huobistock.GetLatestTrade(stock)
+	a5, _ := huobimarket.GetLatestTrade(stock)
 	utils.P(a5)
 }
 
 func Market_Bind() {
-	a5, _ := huobistock.GetBuySellTick(stock, 5)
+	a5, _ := huobimarket.GetBuySellTick(stock, 5)
 	fmt.Println(a5.Asks[0], a5.Bids[0])
-	a6, _ := huobistock.GetLatestTrade(stock)
+	a6, _ := huobimarket.GetLatestTrade(stock)
 	fmt.Println(a6.Data)
 }
