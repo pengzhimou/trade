@@ -11,7 +11,6 @@ import (
 /////////////////////////////////////////////
 //不同的交易中心
 type MarketInfo interface {
-	GetCandleStick24H(stock string) (*market.Candlestick, error)
 	GetCandleStick(stock string, period string, size int) ([]market.Candlestick, error)
 	GetBuySellTick(stock string, count int) (*market.Depth, error)
 	GetLatestTrade(stock string) (*market.TradeTick, error)
@@ -50,16 +49,6 @@ func (hs *HuobiMarket) GetCandleStick(stock string, period string, size int) ([]
 	resp, err := hs.Client.GetCandlestick(stock, optionalRequest)
 	if err != nil {
 		applogger.Error("GetCandlestick error", err.Error())
-	}
-	return resp, err
-}
-
-//
-// 与上面一致
-func (hs *HuobiMarket) GetCandleStick24H(stock string) (*market.Candlestick, error) {
-	resp, err := hs.Client.GetLast24hCandlestick(stock)
-	if err != nil {
-		applogger.Error(err.Error())
 	}
 	return resp, err
 }

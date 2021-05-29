@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	uuid "github.com/satori/go.uuid"
+	"github.com/shopspring/decimal"
 )
 
 func P(s interface{}) string {
@@ -17,4 +18,26 @@ func P(s interface{}) string {
 func GenUUID() string {
 	u2 := uuid.NewV4()
 	return u2.String()
+}
+
+func Cal(a, b decimal.Decimal, w string) decimal.Decimal {
+	switch w {
+	case "+":
+		return a.Add(b)
+	case "-":
+		return a.Sub(b)
+	case "*":
+		return a.Mul(b)
+	case "/":
+		return a.Div(b)
+	default:
+		panic("+-*/")
+	}
+}
+
+func Blacklist() []string {
+	return []string{
+		// "ftiusdt",
+		// "swftcusdt",
+	}
 }
