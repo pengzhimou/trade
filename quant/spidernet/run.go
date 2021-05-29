@@ -121,8 +121,11 @@ func Run() {
 					Name: stock,
 				}
 				t := NewTask(func() error {
+					//拿到需要的股票信息
 					fmt.Println(sn.GetStockRiseFall(stk, &huobimarket, market.DAY1))
+					//分析股票，
 					time.Sleep(time.Second * 1)
+
 					return nil
 				})
 				p.EntryChannel <- t
