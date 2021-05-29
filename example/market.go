@@ -24,17 +24,10 @@ var (
 	}
 	stock = "oneusdt"
 	min5  = market.MIN5
-	min15 = market.MIN15
-	day1  = market.DAY1
 )
 
 func Market_GetCandleStick() {
 	a5, _ := huobimarket.GetCandleStick(stock, min5, 5)
-	utils.P(a5)
-}
-
-func Market_GetCandleStick24H() {
-	a5, _ := huobimarket.GetCandleStick24H(stock)
 	utils.P(a5)
 }
 
